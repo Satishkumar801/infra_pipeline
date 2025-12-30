@@ -26,40 +26,40 @@ stages:
             backendAzureRmContainerName: 'newcontainer'
             backendAzureRmKey: 'infra_pipeline.tfstate'
 
-        # - task: TerraformTask@5
-        #   displayName: terraform validate
-        #   inputs:
-        #     provider: 'azurerm'
-        #     command: 'validate'
-        #     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+        - task: TerraformTask@5
+          displayName: terraform validate
+          inputs:
+            provider: 'azurerm'
+            command: 'validate'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
         
-        # - task: TerraformTask@5
-          # displayName: terraform plan
-          # inputs:
-          #   provider: 'azurerm'
-          #   command: 'plan'
-          #   workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
-          #   environmentServiceNameAzureRM: 'First_service_connection'
+        - task: TerraformTask@5
+          displayName: terraform plan
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+            environmentServiceNameAzureRM: 'First_service_connection'
 
   - stage: scaningtools
     displayName: tfsec tflint and checkov
     jobs:
-      # - job: tfsecjob
-      #   displayName: tfsec
-      #   steps:
-      #   - task: tfsec@1
-      #     inputs:
-      #       version: 'v1.26.0'
-      #       dir: '$(System.DefaultWorkingDirectory)/environments/dev'
+      - job: tfsecjob
+        displayName: tfsec
+        steps:
+        - task: tfsec@1
+          inputs:
+            version: 'v1.26.0'
+            dir: '$(System.DefaultWorkingDirectory)/environments/dev'
 
-      # - job: tflintjob
-      #   displayName: tflint
-      #   steps:
-      #   - task: PowerShell@2
-      #     inputs:
-      #       targetType: 'inline'
-      #       script: 'tflint'
-      #       workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+      - job: tflintjob
+        displayName: tflint
+        steps:
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: 'tflint'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
       - job: checkovjob
         displayName: checkov
