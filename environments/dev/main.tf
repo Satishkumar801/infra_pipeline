@@ -40,6 +40,7 @@ module "sql_db" {
   sqldatabase = var.dbs
 }
 module "nsg_block" {
+  depends_on = [ module.rg_block ]
   source = "../../modules/nsg"
   nsg    = var.nsg
 }
@@ -49,5 +50,6 @@ module "nsg_block" {
 #   source     = "../../modules/keyvault"
 #   keyvault   = var.key_vault
 # }
+
 
 
