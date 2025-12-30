@@ -44,15 +44,15 @@ stages:
   - stage: scaningtools
     displayName: tfsec tflint and checkov
     jobs:
-      # - job: scaningjob
-      #   displayName: tfsec
-      #   steps:
-      #   - task: tfsec@1
-      #     inputs:
-      #       version: 'v1.26.0'
-      #       dir: '$(System.DefaultWorkingDirectory)/environments/dev'
+      - job: tfsecjob
+        displayName: tfsec
+        steps:
+        - task: tfsec@1
+          inputs:
+            version: 'v1.26.0'
+            dir: '$(System.DefaultWorkingDirectory)/environments/dev'
 
-      - job: scaningjob
+      - job: tflintjob
         displayName: tflint
         steps:
         - task: PowerShell@2
@@ -60,3 +60,12 @@ stages:
             targetType: 'inline'
             script: 'tflint'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+
+      - job: checkovjob
+        displayName: checkov
+        steps:
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: 'checkov -d .'
+            workingDirectory: '''$(System.DefaultWorkingDirectory)/environments/dev'
