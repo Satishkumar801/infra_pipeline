@@ -1,7 +1,7 @@
 resource "azurerm_network_security_group" "nsg_block" {
     for_each = var.nsg
   name                = each.value.nsg_name
-  location            = each.value.ngs_location
+  location            = each.value.nsg_location
   resource_group_name = each.value.rg_name
 
 #   security_rule {
@@ -61,4 +61,5 @@ resource "azurerm_network_security_group" "nsg_block" {
 
 variable "nsg" {
   type = any
+
 }
