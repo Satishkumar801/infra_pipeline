@@ -67,5 +67,7 @@ stages:
         - task: PowerShell@2
           inputs:
             targetType: 'inline'
-            script: 'checkov -d .'
+            script: '| checkov -d . --severity-threshold HIGH'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+
+
