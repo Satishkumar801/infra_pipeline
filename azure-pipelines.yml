@@ -18,7 +18,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'init'
-            workingDirectory: '$(System.DefaultWorkingDirectory)environments/dev'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
             backendAzureRmUseEntraIdForAuthentication: false
             backendServiceArm: 'First_service_connection'
             backendAzureRmResourceGroupName: 'satish_rg111'
@@ -31,14 +31,14 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'validate'
-            workingDirectory: '$(System.DefaultWorkingDirectory)environments/dev'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
         
         - task: TerraformTask@5
           displayName: terraform plan
           inputs:
             provider: 'azurerm'
             command: 'plan'
-            workingDirectory: '$(System.DefaultWorkingDirectory)environments/dev'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
             environmentServiceNameAzureRM: 'First_service_connection'
 
   # - stage: 
