@@ -9,9 +9,9 @@ stages:
       - job: initvalidateplanjob
         displayName: init validate and plan job
         steps:
-        - task: TerraformInstaller@1
-          inputs:
-            terraformVersion: 'latest'
+        # - task: TerraformInstaller@1
+        #   inputs:
+        #     terraformVersion: 'latest'
 
         - task: TerraformTask@5
           displayName: terraform init
@@ -26,23 +26,28 @@ stages:
             backendAzureRmContainerName: 'newcontainer'
             backendAzureRmKey: 'infra_pipeline.tfstate'
 
-        - task: TerraformTask@5
-          displayName: terraform validate
-          inputs:
-            provider: 'azurerm'
-            command: 'validate'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+        # - task: TerraformTask@5
+        #   displayName: terraform validate
+        #   inputs:
+        #     provider: 'azurerm'
+        #     command: 'validate'
+        #     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
         
-        - task: TerraformTask@5
-          displayName: terraform plan
-          inputs:
-            provider: 'azurerm'
-            command: 'plan'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
-            environmentServiceNameAzureRM: 'First_service_connection'
+        # - task: TerraformTask@5
+          # displayName: terraform plan
+          # inputs:
+          #   provider: 'azurerm'
+          #   command: 'plan'
+          #   workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+          #   environmentServiceNameAzureRM: 'First_service_connection'
 
-  # - stage: 
-  #   jobs:
-  #     - job: 
-  #       steps:
-  #         - 
+  - stage: scaningtools
+    displayName: tfsec tflint and checkov
+    jobs:
+      - job: scaningjob
+        displayName: tfsec
+        steps:
+        - task: tfsec@1
+          inputs:
+            version: 'v1.26.0'
+            dir: '$(System.DefaultWorkingDirectory)/environments/dev'
