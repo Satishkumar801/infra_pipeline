@@ -68,4 +68,4 @@ stages:
           inputs:
             targetType: 'inline'
             script: 'checkov -d .'
-            workingDirectory: '''$(System.DefaultWorkingDirectory)/environments/dev'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
