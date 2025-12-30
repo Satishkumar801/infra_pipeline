@@ -26,20 +26,20 @@ stages:
             backendAzureRmContainerName: 'newcontainer'
             backendAzureRmKey: 'infra_pipeline.tfstate'
 
-        # - task: TerraformTask@5
-        #   displayName: terraform validate
-        #   inputs:
-        #     provider: 'azurerm'
-        #     command: 'validate'
-        #     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+        - task: TerraformTask@5
+          displayName: terraform validate
+          inputs:
+            provider: 'azurerm'
+            command: 'validate'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
         
-        # - task: TerraformTask@5
-        #   displayName: terraform plan
-        #   inputs:
-        #     provider: 'azurerm'
-        #     command: 'plan'
-        #     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
-        #     environmentServiceNameAzureRM: 'First_service_connection'
+        - task: TerraformTask@5
+          displayName: terraform plan
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+            environmentServiceNameAzureRM: 'First_service_connection'
 
   - stage: scaningtools
     displayName: tfsec tflint and checkov
@@ -82,8 +82,8 @@ stages:
           inputs:
             targetType: 'inline'
             script: |
-              infracost auth login
-              infracost breakdown --path .
+              infracost auth login --ci
+              infracost breakdown --path $(System.DefaultWorkingDirectory)/environments/dev
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
 
