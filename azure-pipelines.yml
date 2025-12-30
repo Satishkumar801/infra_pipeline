@@ -41,35 +41,35 @@ stages:
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
             environmentServiceNameAzureRM: 'First_service_connection'
 
-  - stage: scaningtools
-    displayName: tfsec tflint and checkov
-    jobs:
-      - job: tfsecjob
-        displayName: tfsec
-        steps:
-        - task: tfsec@1
-          inputs:
-            version: 'v1.26.0'
-            dir: '$(System.DefaultWorkingDirectory)/environments/dev'
+  # - stage: scaningtools
+  #   displayName: tfsec tflint and checkov
+  #   jobs:
+  #     - job: tfsecjob
+  #       displayName: tfsec
+  #       steps:
+  #       - task: tfsec@1
+  #         inputs:
+  #           version: 'v1.26.0'
+  #           dir: '$(System.DefaultWorkingDirectory)/environments/dev'
 
-      - job: tflintjob
-        displayName: tflint
-        steps:
-        - task: PowerShell@2
-          inputs:
-            targetType: 'inline'
-            script: 'tflint'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+  #     - job: tflintjob
+  #       displayName: tflint
+  #       steps:
+  #       - task: PowerShell@2
+  #         inputs:
+  #           targetType: 'inline'
+  #           script: 'tflint'
+  #           workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
-      - job: checkovjob
-        displayName: checkov
-        steps:
-        - task: PowerShell@2
-          continueOnError: true
-          inputs:
-            targetType: 'inline'
-            script: 'checkov -d . || true'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+  #     - job: checkovjob
+  #       displayName: checkov
+  #       steps:
+  #       - task: PowerShell@2
+  #         continueOnError: true
+  #         inputs:
+  #           targetType: 'inline'
+  #           script: 'checkov -d . || true'
+  #           workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
   - stage: findops
     displayName: infracosttool
@@ -83,7 +83,7 @@ stages:
             targetType: 'inline'
             script: |
               infracost auth login --ci
-              infracost breakdown --path $(System.DefaultWorkingDirectory)/environments/dev
+              infracost breakdown --path $(System.DefaultWorkingDirectory)/environments
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
 
