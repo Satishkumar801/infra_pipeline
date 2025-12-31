@@ -107,7 +107,7 @@ stages:
             targetType: 'inline'
             script: |
               infracost auth login --ci
-              infracost breakdown --path '$(System.DefaultWorkingDirectory)/environments/dev'
+              infracost breakdown --path $(System.DefaultWorkingDirectory)/environments/dev
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
 
