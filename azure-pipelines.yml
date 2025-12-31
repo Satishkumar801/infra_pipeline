@@ -41,9 +41,9 @@ stages:
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
             environmentServiceNameAzureRM: 'First_service_connection'
 
-  # - stage: scaningtools
-  #   displayName: tfsec tflint and checkov
-  #   jobs:
+  - stage: scaningtools
+    displayName: tfsec tflint and checkov
+    jobs:
   #     - job: tfsecjob
   #       displayName: tfsec
   #       steps:
@@ -61,15 +61,15 @@ stages:
   #           script: 'tflint'
   #           workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
-  #     - job: checkovjob
-  #       displayName: checkov
-  #       steps:
-  #       - task: PowerShell@2
-  #         continueOnError: true
-  #         inputs:
-  #           targetType: 'inline'
-  #           script: 'checkov -d . || true'
-  #           workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+      - job: checkovjob
+        displayName: checkov
+        steps:
+        - task: PowerShell@2
+          continueOnError: true
+          inputs:
+            targetType: 'inline'
+            script: 'checkov -d .'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
   - stage: findops
     displayName: infracosttool
