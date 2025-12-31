@@ -3,47 +3,47 @@ trigger: none
 pool: Default
 
 stages:
-  - stage: initvalidateplan
-    displayName: init validate and plan
-    jobs:
-      - job: initvalidateplanjob
-        displayName: init validate and plan job
-        steps:
+  # - stage: initvalidateplan
+  #   displayName: init validate and plan
+  #   jobs:
+      # - job: initvalidateplanjob
+      #   displayName: init validate and plan job
+      #   steps:
         # - task: TerraformInstaller@1
         #   inputs:
         #     terraformVersion: 'latest'
 
-        - task: TerraformTask@5
-          displayName: terraform init
-          inputs:
-            provider: 'azurerm'
-            command: 'init'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
-            backendAzureRmUseEntraIdForAuthentication: false
-            backendServiceArm: 'First_service_connection'
-            backendAzureRmResourceGroupName: 'satish_rg111'
-            backendAzureRmStorageAccountName: 'satishstg111222'
-            backendAzureRmContainerName: 'newcontainer'
-            backendAzureRmKey: 'infra_pipeline.tfstate'
+        # - task: TerraformTask@5
+        #   displayName: terraform init
+        #   inputs:
+        #     provider: 'azurerm'
+        #     command: 'init'
+        #     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+        #     backendAzureRmUseEntraIdForAuthentication: false
+        #     backendServiceArm: 'First_service_connection'
+        #     backendAzureRmResourceGroupName: 'satish_rg111'
+        #     backendAzureRmStorageAccountName: 'satishstg111222'
+        #     backendAzureRmContainerName: 'newcontainer'
+        #     backendAzureRmKey: 'infra_pipeline.tfstate'
 
-        - task: TerraformTask@5
-          displayName: terraform validate
-          inputs:
-            provider: 'azurerm'
-            command: 'validate'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+        # - task: TerraformTask@5
+        #   displayName: terraform validate
+        #   inputs:
+        #     provider: 'azurerm'
+        #     command: 'validate'
+        #     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
         
-        - task: TerraformTask@5
-          displayName: terraform plan
-          inputs:
-            provider: 'azurerm'
-            command: 'plan'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
-            environmentServiceNameAzureRM: 'First_service_connection'
+        # - task: TerraformTask@5
+        #   displayName: terraform plan
+        #   inputs:
+        #     provider: 'azurerm'
+        #     command: 'plan'
+        #     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+        #     environmentServiceNameAzureRM: 'First_service_connection'
 
-  - stage: scaningtools
-    displayName: tfsec tflint and checkov
-    jobs:
+  # - stage: scaningtools
+  #   displayName: tfsec tflint and checkov
+  #   jobs:
   #     - job: tfsecjob
   #       displayName: tfsec
   #       steps:
@@ -61,15 +61,15 @@ stages:
   #           script: 'tflint'
   #           workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
-      - job: checkovjob
-        displayName: checkov
-        steps:
-        - task: PowerShell@2
-          continueOnError: true
-          inputs:
-            targetType: 'inline'
-            script: 'checkov -d .'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+      # - job: checkovjob
+      #   displayName: checkov
+      #   steps:
+      #   - task: PowerShell@2
+      #     continueOnError: true
+      #     inputs:
+      #       targetType: 'inline'
+      #       script: 'checkov -d .'
+      #       workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
   - stage: findops
     displayName: infracosttool
@@ -77,7 +77,16 @@ stages:
       - job: infracostjob
         displayName: infracost
         steps:
-
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+            backendServiceArm: 'First_service_connection'
+            backendAzureRmResourceGroupName: 'satish_rg111'
+            backendAzureRmStorageAccountName: 'satishstg111222'
+            backendAzureRmContainerName: 'newcontainer'
+            backendAzureRmKey: 'infra_pipeline.tfstate'
         - task: PowerShell@2
           inputs:
             targetType: 'inline'
