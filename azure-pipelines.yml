@@ -94,12 +94,20 @@ stages:
             command: 'plan'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
             environmentServiceNameAzureRM: 'First_service_connection'
+        # - task: PowerShell@2
+        #   inputs:
+        #     targetType: 'inline'
+        #     script: |
+        #       infracost auth login
+        #       infracost breakdown --path $(System.DefaultWorkingDirectory)/environments/dev
+        #     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+
         - task: PowerShell@2
           inputs:
             targetType: 'inline'
-            script: 
-              infracost auth login
-              infracost breakdown --path $(System.DefaultWorkingDirectory)/environments/dev
+            script: |
+              infracost auth login --ci
+              infracost breakdown --path '$(System.DefaultWorkingDirectory)/environments/dev'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
 
