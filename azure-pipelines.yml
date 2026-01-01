@@ -33,6 +33,9 @@ stages:
             command: 'validate'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
         
+      - job: terraformplanjob
+        displayName: terrraform plan
+        steps: 
         - task: TerraformTask@5
           displayName: terraform plan
           inputs:
