@@ -6,12 +6,12 @@ stages:
   - stage: initvalidateplan
     displayName: init validate and plan
     jobs:
-      - job: initvalidateplanjob
+      - job: initvalidatejob
         displayName: init validate and plan job
         steps:
-        # - task: TerraformInstaller@1
-        #   inputs:
-        #     terraformVersion: 'latest'
+        - task: TerraformInstaller@1
+          inputs:
+            terraformVersion: 'latest'
 
         - task: TerraformTask@5
           displayName: terraform init
@@ -26,27 +26,27 @@ stages:
             backendAzureRmContainerName: 'newcontainer'
             backendAzureRmKey: 'infra_pipeline.tfstate'
 
-        # - task: TerraformTask@5
-        #   displayName: terraform validate
-        #   inputs:
-        #     provider: 'azurerm'
-        #     command: 'validate'
-        #     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
-        
-      - job: terraformplanjob
-        displayName: terrraform plan
-        steps: 
         - task: TerraformTask@5
-          displayName: terraform plan
+          displayName: terraform validate
           inputs:
             provider: 'azurerm'
-            command: 'plan'
+            command: 'validate'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
-            environmentServiceNameAzureRM: 'First_service_connection'
+        
+      # - job: terraformplanjob
+      #   displayName: terrraform plan
+      #   steps: 
+      #   - task: TerraformTask@5
+      #     displayName: terraform plan
+      #     inputs:
+      #       provider: 'azurerm'
+      #       command: 'plan'
+      #       workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+      #       environmentServiceNameAzureRM: 'First_service_connection'
 
-  - stage: scaningtools
-    displayName: tfsec tflint and checkov
-    jobs:
+  # - stage: scaningtools
+  #   displayName: tfsec tflint and checkov
+  #   jobs:
       # - job: tfsecjob
       #   displayName: tfsec
       #   steps:
@@ -55,14 +55,14 @@ stages:
       #       version: 'v1.26.0'
       #       dir: '$(System.DefaultWorkingDirectory)/environments/dev'
 
-      - job: tflintjob
-        displayName: tflint
-        steps:
-        - task: PowerShell@2
-          inputs:
-            targetType: 'inline'
-            script: 'tflint --recursive /f junit > tflint-out.xml'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+      # - job: tflintjob
+      #   displayName: tflint
+      #   steps:
+      #   - task: PowerShell@2
+      #     inputs:
+      #       targetType: 'inline'
+      #       script: 'tflint --recursive /f junit > tflint-out.xml'
+      #       workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
       # - job: checkovjob
       #   displayName: checkov
@@ -74,22 +74,22 @@ stages:
       #       script: 'checkov -d .'
       #       workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
-  - stage: findops
-    displayName: infracosttool
-    jobs:
-      - job: infracostjob
-        displayName: infracost
-        steps:
-        - task: TerraformTask@5
-          inputs:
-            provider: 'azurerm'
-            command: 'init'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
-            backendServiceArm: 'First_service_connection'
-            backendAzureRmResourceGroupName: 'satish_rg111'
-            backendAzureRmStorageAccountName: 'satishstg111222'
-            backendAzureRmContainerName: 'newcontainer'
-            backendAzureRmKey: 'infra_pipeline.tfstate'
+  # - stage: findops
+  #   displayName: infracosttool
+  #   jobs:
+  #     - job: infracostjob
+  #       displayName: infracost
+  #       steps:
+  #       - task: TerraformTask@5
+  #         inputs:
+  #           provider: 'azurerm'
+  #           command: 'init'
+  #           workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+  #           backendServiceArm: 'First_service_connection'
+  #           backendAzureRmResourceGroupName: 'satish_rg111'
+  #           backendAzureRmStorageAccountName: 'satishstg111222'
+  #           backendAzureRmContainerName: 'newcontainer'
+  #           backendAzureRmKey: 'infra_pipeline.tfstate'
 
         # - task: TerraformTask@5
         #   inputs:
@@ -105,12 +105,12 @@ stages:
         #       infracost breakdown --path $(System.DefaultWorkingDirectory)/environments/dev
         #     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
-        - task: PowerShell@2
-          inputs:
-            targetType: 'inline'
-            script: |
-              infracost auth login --ci
-              infracost breakdown --path '$(System.DefaultWorkingDirectory)/environments/dev'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+        # - task: PowerShell@2
+        #   inputs:
+        #     targetType: 'inline'
+        #     script: |
+        #       infracost auth login --ci
+        #       infracost breakdown --path '$(System.DefaultWorkingDirectory)/environments/dev'
+        #     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
 
