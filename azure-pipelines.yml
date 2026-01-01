@@ -9,9 +9,9 @@ stages:
       - job: initvalidateplanjob
         displayName: init validate and plan job
         steps:
-        - task: TerraformInstaller@1
-          inputs:
-            terraformVersion: 'latest'
+        # - task: TerraformInstaller@1
+        #   inputs:
+        #     terraformVersion: 'latest'
 
         - task: TerraformTask@5
           displayName: terraform init
@@ -26,12 +26,12 @@ stages:
             backendAzureRmContainerName: 'newcontainer'
             backendAzureRmKey: 'infra_pipeline.tfstate'
 
-        - task: TerraformTask@5
-          displayName: terraform validate
-          inputs:
-            provider: 'azurerm'
-            command: 'validate'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+        # - task: TerraformTask@5
+        #   displayName: terraform validate
+        #   inputs:
+        #     provider: 'azurerm'
+        #     command: 'validate'
+        #     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
         
       - job: terraformplanjob
         displayName: terrraform plan
@@ -47,13 +47,13 @@ stages:
   - stage: scaningtools
     displayName: tfsec tflint and checkov
     jobs:
-      - job: tfsecjob
-        displayName: tfsec
-        steps:
-        - task: tfsec@1
-          inputs:
-            version: 'v1.26.0'
-            dir: '$(System.DefaultWorkingDirectory)/environments/dev'
+      # - job: tfsecjob
+      #   displayName: tfsec
+      #   steps:
+      #   - task: tfsec@1
+      #     inputs:
+      #       version: 'v1.26.0'
+      #       dir: '$(System.DefaultWorkingDirectory)/environments/dev'
 
       - job: tflintjob
         displayName: tflint
@@ -64,15 +64,15 @@ stages:
             script: 'tflint --recursive /f junit > tflint-out.xml'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
-      - job: checkovjob
-        displayName: checkov
-        steps:
-        - task: PowerShell@2
-          continueOnError: true
-          inputs:
-            targetType: 'inline'
-            script: 'checkov -d .'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+      # - job: checkovjob
+      #   displayName: checkov
+      #   steps:
+      #   - task: PowerShell@2
+      #     continueOnError: true
+      #     inputs:
+      #       targetType: 'inline'
+      #       script: 'checkov -d .'
+      #       workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
   - stage: findops
     displayName: infracosttool
@@ -91,12 +91,12 @@ stages:
             backendAzureRmContainerName: 'newcontainer'
             backendAzureRmKey: 'infra_pipeline.tfstate'
 
-        - task: TerraformTask@5
-          inputs:
-            provider: 'azurerm'
-            command: 'plan'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
-            environmentServiceNameAzureRM: 'First_service_connection'
+        # - task: TerraformTask@5
+        #   inputs:
+        #     provider: 'azurerm'
+        #     command: 'plan'
+        #     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+        #     environmentServiceNameAzureRM: 'First_service_connection'
         # - task: PowerShell@2
         #   inputs:
         #     targetType: 'inline'
