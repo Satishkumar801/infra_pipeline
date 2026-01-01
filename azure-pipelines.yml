@@ -61,7 +61,7 @@ stages:
         - task: PowerShell@2
           inputs:
             targetType: 'inline'
-            script: 'tflint'
+            script: 'tflint --recursive /f junit > tflint-out.xml'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
       - job: checkovjob
