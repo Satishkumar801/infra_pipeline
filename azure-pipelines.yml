@@ -65,6 +65,12 @@ stages:
             script: 'tflint --recursive /f junit > tflint-out.xml'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
+        - task: PublishTestResults@2
+          inputs:
+            testResultsFormat: 'JUnit'
+            testResultsFiles: 'tflint-out.xml'
+            testRunTitle: 'tflint'
+
       # - job: checkovjob
       #   displayName: checkov
       #   steps:
