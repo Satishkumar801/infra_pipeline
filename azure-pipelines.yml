@@ -33,16 +33,16 @@ stages:
             command: 'validate'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
         
-      # - job: terraformplanjob
-      #   displayName: terrraform plan
-      #   steps: 
-      #   - task: TerraformTask@5
-      #     displayName: terraform plan
-      #     inputs:
-      #       provider: 'azurerm'
-      #       command: 'plan'
-      #       workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
-      #       environmentServiceNameAzureRM: 'First_service_connection'
+      - job: terraformplanjob
+        displayName: terrraform plan
+        steps: 
+        - task: TerraformTask@5
+          displayName: terraform plan
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+            environmentServiceNameAzureRM: 'First_service_connection'
 
   # - stage: scaningtools
   #   displayName: tfsec tflint and checkov
