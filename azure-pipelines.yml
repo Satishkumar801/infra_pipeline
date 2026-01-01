@@ -64,13 +64,13 @@ stages:
             targetType: 'inline'
             script: |
               tflint --init
-              tflint --recursive --format junit | Out-File -Encoding utf8 tflint-out.xml
+              tflint --recursive --format junit > '**/TEST-*.xml'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
         - task: PublishTestResults@2
           inputs:
             testResultsFormat: 'JUnit'
-            testResultsFiles: 'tflint-out.xml'
+            testResultsFiles: '**/TEST-*.xml'
             testRunTitle: 'tflint scan'
             failTaskOnFailedTests: false
             
