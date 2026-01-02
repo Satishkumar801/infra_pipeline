@@ -48,13 +48,13 @@ stages:
   - stage: scaningtools
     displayName: tfsec tflint and checkov
     jobs:
-      # - job: tfsecjob
-      #   displayName: tfsec
-      #   steps:
-      #   - task: tfsec@1
-      #     inputs:
-      #       version: 'v1.26.0'
-      #       dir: '$(System.DefaultWorkingDirectory)/environments/dev'
+      - job: tfsecjob
+        displayName: tfsec
+        steps:
+        - task: tfsec@1
+          inputs:
+            version: 'v1.26.0'
+            dir: '$(System.DefaultWorkingDirectory)/environments/dev'
 
       - job: tflintjob
         displayName: tflint
@@ -63,16 +63,15 @@ stages:
           inputs:
             targetType: 'inline'
             script: |
-              tflint --init
-              tflint --recursive --format junit > '**/TEST-*.xml'
+              tflint
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
-        - task: PublishTestResults@2
-          inputs:
-            testResultsFormat: 'JUnit'
-            testResultsFiles: '**/TEST-*.xml'
-            testRunTitle: 'tflint scan'
-            failTaskOnFailedTests: false
+        # - task: PublishTestResults@2
+        #   inputs:
+        #     testResultsFormat: 'JUnit'
+        #     testResultsFiles: '**/TEST-*.xml'
+        #     testRunTitle: 'tflint scan'
+        #     failTaskOnFailedTests: false
             
       # - job: checkovjob
       #   displayName: checkov
@@ -84,43 +83,36 @@ stages:
       #       script: 'checkov -d .'
       #       workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
-  # - stage: findops
-  #   displayName: infracosttool
-  #   jobs:
-  #     - job: infracostjob
-  #       displayName: infracost
-  #       steps:
-  #       - task: TerraformTask@5
-  #         inputs:
-  #           provider: 'azurerm'
-  #           command: 'init'
-  #           workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
-  #           backendServiceArm: 'First_service_connection'
-  #           backendAzureRmResourceGroupName: 'satish_rg111'
-  #           backendAzureRmStorageAccountName: 'satishstg111222'
-  #           backendAzureRmContainerName: 'newcontainer'
-  #           backendAzureRmKey: 'infra_pipeline.tfstate'
+  - stage: findops
+    displayName: infracosttool
+    jobs:
+      - job: infracostjob
+        displayName: infracost
+        steps:
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+            backendServiceArm: 'First_service_connection'
+            backendAzureRmResourceGroupName: 'satish_rg111'
+            backendAzureRmStorageAccountName: 'satishstg111222'
+            backendAzureRmContainerName: 'newcontainer'
+            backendAzureRmKey: 'infra_pipeline.tfstate'
 
-        # - task: TerraformTask@5
-        #   inputs:
-        #     provider: 'azurerm'
-        #     command: 'plan'
-        #     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
-        #     environmentServiceNameAzureRM: 'First_service_connection'
-        # - task: PowerShell@2
-        #   inputs:
-        #     targetType: 'inline'
-        #     script: |
-        #       infracost auth login
-        #       infracost breakdown --path $(System.DefaultWorkingDirectory)/environments/dev
-        #     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+            environmentServiceNameAzureRM: 'First_service_connection'
 
-        # - task: PowerShell@2
-        #   inputs:
-        #     targetType: 'inline'
-        #     script: |
-        #       infracost auth login --ci
-        #       infracost breakdown --path '$(System.DefaultWorkingDirectory)/environments/dev'
-        #     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              infracost auth login --ci
+              infracost breakdown --path '$(System.DefaultWorkingDirectory)/environments/dev'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
 
