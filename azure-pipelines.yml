@@ -1,6 +1,6 @@
 trigger: none
 
-pool: Default
+pool: satishagent
 
 stages:
   - stage: initvalidateplan
@@ -20,10 +20,10 @@ stages:
             command: 'init'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
             backendAzureRmUseEntraIdForAuthentication: false
-            backendServiceArm: 'First_service_connection'
-            backendAzureRmResourceGroupName: 'satish_rg111'
-            backendAzureRmStorageAccountName: 'satishstg111222'
-            backendAzureRmContainerName: 'newcontainer'
+            backendServiceArm: 'serviceconnection-2'
+            backendAzureRmResourceGroupName: 'satishrg19'
+            backendAzureRmStorageAccountName: 'satishstorage19'
+            backendAzureRmContainerName: 'pipelinecontainer'
             backendAzureRmKey: 'infra_pipeline.tfstate'
 
         - task: TerraformTask@5
@@ -43,18 +43,18 @@ stages:
             provider: 'azurerm'
             command: 'plan'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
-            environmentServiceNameAzureRM: 'First_service_connection'
+            environmentServiceNameAzureRM: 'serviceconnection-2'
 
   - stage: scaningtools
-    displayName: tfsec tflint and checkov
+    displayName: trivy tflint and checkov
     jobs:
-      - job: tfsecjob
-        displayName: tfsec
-        steps:
-        - task: tfsec@1
-          inputs:
-            version: 'v1.26.0'
-            dir: '$(System.DefaultWorkingDirectory)/environments/dev'
+      - job: trivyjob
+        displayName: trivy
+        # steps:
+        # - task: tfsec@1
+        #   inputs:
+        #     version: 'v1.26.0'
+        #     dir: '$(System.DefaultWorkingDirectory)/environments/dev'
 
       - job: tflintjob
         displayName: tflint
